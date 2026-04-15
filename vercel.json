@@ -1,8 +1,7 @@
 {
-  "buildCommand": "echo 'No build needed for static site'",
-  "outputDirectory": "traveltarget",
+  "buildCommand": "cp -r traveltarget/. .",
   "framework": null,
   "routes": [
-    { "src": "/(.*)", "dest": "/traveltarget/$1" }
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
