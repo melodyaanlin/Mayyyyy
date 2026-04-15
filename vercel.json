@@ -1,0 +1,9 @@
+{
+  "buildCommand": "echo 'No build needed for static site'",
+  "outputDirectory": "traveltarget",
+  "framework": null,
+  "functions": {},
+  "routes": [
+    { "src": "/(.*)", "dest": "/traveltarget/$1" }
+  ]
+}
