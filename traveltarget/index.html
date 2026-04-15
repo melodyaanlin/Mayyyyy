@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>五一出逃计划 | 拼贴志</title>
+    <title>五一出逃计划 | 木言</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+SC:wght@400;700;900&family=Special+Elite&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
@@ -178,7 +178,7 @@
             { id: 'kanas', name: '喀纳斯', tags: ['nature', 'active', 'slow'], title: '北疆的童话世界', desc: '位于新疆阿勒泰的喀纳斯，以其神秘的湖怪传说和绝美的自然风光闻名。五月的喀纳斯，冰雪初融，湖水湛蓝，是摄影的绝佳时机。', 
               imgs: ['pic/thumbnail/img_046.jpg', 'pic/thumbnail/img_047.jpg', 'pic/thumbnail/img_048.jpg'], accent: 'var(--retro-blue)' },
             { id: 'yueyanglou', name: '岳阳', tags: ['history', 'food', 'slow'], title: '洞庭湖畔的文化名城', desc: '岳阳以岳阳楼和洞庭湖闻名，是中国历史文化名城。五月的岳阳，洞庭湖水位上涨，烟波浩渺，是观赏湖光山色的好时机。', 
-              imgs: ['https://picsum.photos/seed/yueyang1/800/450', 'https://picsum.photos/seed/yueyang2/800/450', 'https://picsum.photos/seed/yueyang3/800/450'], accent: 'var(--retro-yellow)' },
+              imgs: ['pic/thumbnail/img_061.jpg', 'pic/thumbnail/img_062.jpg', 'pic/thumbnail/img_063.jpg'], accent: 'var(--retro-yellow)' },
             { id: 'tongren', name: '铜仁', tags: ['nature', 'active', 'art'], title: '贵州的生态天堂', desc: '位于贵州东部的铜仁，以梵净山和九龙洞闻名。五月的铜仁，气候宜人，是徒步和探索喀斯特地貌的绝佳时机。', 
               imgs: ['pic/thumbnail/img_049.jpg', 'pic/thumbnail/img_050.jpg', 'pic/thumbnail/img_051.jpg'], accent: 'var(--retro-green)' },
             { id: 'liaoyang', name: '辽阳', tags: ['history', 'food', 'slow'], title: '东北的历史名城', desc: '辽阳是东北地区最古老的城市之一，拥有丰富的历史文化遗产。五月的辽阳，气候温暖，是游览古迹和品尝东北美食的好时机。', 
@@ -186,7 +186,7 @@
             { id: 'shaoguan', name: '韶关', tags: ['nature', 'active', 'history'], title: '岭南的山水名城', desc: '韶关位于广东北部，以丹霞山和南华寺闻名。五月的韶关，绿意盎然，是徒步和感受岭南文化的绝佳时机。', 
               imgs: ['pic/thumbnail/img_055.jpg', 'pic/thumbnail/img_056.jpg', 'pic/thumbnail/img_057.jpg'], accent: 'var(--retro-green)' },
             { id: 'xilinhot', name: '锡林浩特', tags: ['nature', 'active', 'slow'], title: '锡林郭勒草原的中心', desc: '锡林浩特是锡林郭勒草原的中心城市，周围环绕着无边无际的草原。五月的锡林浩特，草原初绿，是感受草原风情的好时机。', 
-              imgs: ['https://picsum.photos/seed/xilin1/800/450', 'https://picsum.photos/seed/xilin2/800/450', 'https://picsum.photos/seed/xilin3/800/450'], accent: 'var(--retro-green)' },
+              imgs: ['pic/thumbnail/img_064.jpg', 'pic/thumbnail/img_065.jpg', 'pic/thumbnail/img_066.jpg'], accent: 'var(--retro-green)' },
             { id: 'chizhou', name: '池州', tags: ['nature', 'history', 'slow'], title: '安徽的山水名城', desc: '池州位于安徽南部，以九华山和牯牛降闻名。五月的池州，气候宜人，是游览山水和感受佛教文化的好时机。', 
               imgs: ['pic/thumbnail/img_058.jpg', 'pic/thumbnail/img_059.jpg', 'pic/thumbnail/img_060.jpg'], accent: 'var(--retro-blue)' }
         ];
@@ -608,25 +608,45 @@
         }
 
         function saveLongImage() {
-            // 获取整个应用容器
             const appDiv = document.getElementById('app');
             
-            // 使用html2canvas捕获长图
-            html2canvas(appDiv, {
-                scale: 2, // 提高图片质量
-                useCORS: true, // 允许跨域图片
-                logging: false,
-                backgroundColor: '#F8F4E6' // 设置背景色
-            }).then(canvas => {
-                // 创建下载链接
-                const link = document.createElement('a');
-                link.download = '五一出逃计划-灵魂鉴定书.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(error => {
-                console.error('保存长图失败:', error);
-                alert('保存失败，请稍后重试');
-            });
+            // 尝试使用浏览器原生截图API
+            if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+                navigator.mediaDevices.getDisplayMedia({
+                    video: { displaySurface: 'browser' },
+                    audio: false
+                }).then(stream => {
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.onloadedmetadata = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(video, 0, 0);
+                        
+                        canvas.toBlob(function(blob) {
+                            const link = document.createElement('a');
+                            link.download = '五一出逃计划-灵魂鉴定书.png';
+                            link.href = URL.createObjectURL(blob);
+                            link.click();
+                            URL.revokeObjectURL(link.href);
+                        }, 'image/png');
+                        
+                        stream.getTracks().forEach(track => track.stop());
+                        video.remove();
+                    };
+                }).catch(() => {
+                    // 如果用户拒绝或不支持，提示使用快捷键
+                    fallbackScreenshot();
+                });
+            } else {
+                fallbackScreenshot();
+            }
+        }
+        
+        function fallbackScreenshot() {
+            alert('💡 截图提示\n\n由于浏览器安全限制，无法自动保存图片。请使用快捷键手动截图：\n\nMac: Command + Shift + 4\nWindows: Win + Shift + S\n\n然后选择整个页面区域保存。');
         }
 
         // 初始化
